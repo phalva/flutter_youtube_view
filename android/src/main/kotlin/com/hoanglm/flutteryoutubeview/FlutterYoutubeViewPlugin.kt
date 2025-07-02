@@ -53,38 +53,7 @@ class FlutterYoutubeViewPlugin : FlutterPlugin, ActivityAware, Application.Activ
     override fun onDetachedFromActivityForConfigChanges() {
         onDetachedFromActivity()
     }
-
-    // pre-1.12 
-    // This static function is optional and equivalent to onAttachedToEngine. It supports the old
-    // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
-    // plugin registration via this function while apps migrate to use the new Android APIs
-    // post-flutter-1.12 via https://flutter.dev/go/android-project-migration.
-    //
-    // It is encouraged to share logic between onAttachedToEngine and registerWith to keep
-    // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
-    // depending on the user's project. onAttachedToEngine or registerWith must both be defined
-    // in the same class.
-    companion object {
-        @JvmStatic
-        fun registerWith(registrar: PluginRegistry.Registrar) {
-            if (registrar.activity() == null) {
-                // When a background flutter view tries to register the plugin, the registrar has no activity.
-                // We stop the registration process as this plugin is foreground only.
-                return;
-            }
-            val plugin = FlutterYoutubeViewPlugin()
-            // register activity lifecycle requirements
-            plugin.registrarActivityHashCode = registrar.activity().hashCode()
-            registrar.activity()?.application?.registerActivityLifecycleCallbacks(plugin)
-            // create the youtube view
-            registrar
-                    .platformViewRegistry()
-                    .registerViewFactory(
-                            "plugins.hoanglm.com/youtube", YoutubeFactory(registrar.messenger(), plugin.lifecycleChannel)
-                    )
-        }
-    }
-
+    
     // lifecycle callbacks interface methods
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         if (activity.hashCode() != registrarActivityHashCode) {
